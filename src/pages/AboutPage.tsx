@@ -51,7 +51,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onOpenEmergenc
             
             <div className="lg:col-span-6 relative min-h-[380px] sm:min-h-[460px] h-full">
               <img
-                src="/src/assets/images/wecare_medical_team_1792924563947.jpg"
+                src="./images/wecare_medical_team_1792924563947.jpg"
                 alt="WeCare Hospital Medical Leaders and Clinical Specialists"
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"

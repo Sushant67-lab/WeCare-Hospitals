@@ -104,7 +104,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <div className="lg:col-span-5 relative">
               <div className="relative rounded-3xl overflow-hidden border border-slate-200/80 shadow-lg bg-slate-100 aspect-[4/3] sm:aspect-[5/4] lg:aspect-square">
                 <img
-                  src="/src/assets/images/wecare_modern_facility_1792924563210.jpg"
+                  src="./images/wecare_modern_facility_1792924563210.jpg"
                   alt="WeCare Hospitals Clinical Team and Facility"
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
@@ -231,7 +231,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     onClick={() => onSelectDepartment(dept)}
                   >
                     <img
-                      src={dept.image || '/src/assets/images/wecare_hospital_exterior_1792924562478.jpg'}
+                      src={dept.image || './images/wecare_hospital_exterior_1792924562478.jpg'}
                       alt={`${cardTitle} Department`}
                       className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
                       referrerPolicy="no-referrer"

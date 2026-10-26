@@ -243,7 +243,7 @@ export const DepartmentsPage: React.FC<DepartmentsPageProps> = ({
                   onClick={() => onSelectDepartment(dept)}
                 >
                   <img
-                    src={dept.image || '/src/assets/images/wecare_hospital_exterior_1792924562478.jpg'}
+                    src={dept.image || './images/wecare_hospital_exterior_1792924562478.jpg'}
                     alt={`${cardTitle} at WeCare Hospitals`}
                     className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
                     referrerPolicy="no-referrer"
