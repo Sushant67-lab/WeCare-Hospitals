@@ -1,0 +1,72 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Safety Net: Default-deny all unexpected collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Admin: Sushant or role: admin in user doc
+    function isAdmin() {
+      return isSignedIn() && (
+        (request.auth.token.email != null && request.auth.token.email.lower() == 'sushantabc122@gmail.com') ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+      );
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // User profile validation
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email'])
+        && data.uid is string
+        && data.email is string;
+    }
+
+    // Appointment validation
+    function isValidAppointment(data) {
+      return data.keys().hasAll(['patientName', 'patientPhone', 'patientEmail', 'departmentId', 'date', 'timeSlot', 'status'])
+        && data.patientName is string && data.patientName.size() > 0
+        && data.patientPhone is string && data.patientPhone.size() > 0
+        && data.patientEmail is string && data.patientEmail.size() > 0
+        && data.departmentId is string
+        && data.date is string
+        && data.timeSlot is string
+        && (data.status in ['pending', 'confirmed', 'cancelled', 'completed']);
+    }
+
+    // User profiles collection
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
+      allow create, update: if isSignedIn() || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Appointments collection
+    match /appointments/{appointmentId} {
+      allow get: if isSignedIn() || (resource != null && resource.data.userId == request.auth.uid) || isAdmin();
+      allow list: if isSignedIn();
+      allow create: if isValidAppointment(incoming());
+      allow update: if isSignedIn() || isAdmin();
+      allow delete: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+  }
+}
