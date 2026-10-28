@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PageView, Doctor, Department, Appointment } from './types';
 import { DEPARTMENTS, DOCTORS } from './data/hospitalData';
-import { getStoredAppointments } from './utils/storage';
 import { 
   fetchUserAppointments, 
   subscribeToUserAppointments, 
@@ -55,8 +54,7 @@ function HospitalApp() {
       });
       return () => unsubscribe();
     } else {
-      const local = getStoredAppointments();
-      setAppointments(local);
+      setAppointments([]);
     }
   }, [user]);
 
@@ -129,7 +127,7 @@ function HospitalApp() {
     setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: newStatus } : a));
   };
 
-  const activeCount = appointments.filter(a => a.status === 'confirmed').length;
+  const activeCount = user ? appointments.filter(a => a.status === 'confirmed').length : 0;
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900 selection:bg-blue-100 selection:text-blue-900 w-full max-w-full overflow-x-hidden">
@@ -139,7 +137,7 @@ function HospitalApp() {
         currentPage={currentPage}
         onNavigate={handleNavigate}
         onOpenEmergency={() => setIsEmergencyOpen(true)}
-        appointmentsCount={activeCount}
+        appointmentsCount={user ? activeCount : 0}
       />
 
       {/* Main Page Content */}

@@ -1,5 +1,4 @@
 import { Appointment } from '../types';
-import { INITIAL_SAMPLE_APPOINTMENTS } from '../data/hospitalData';
 
 const APPOINTMENTS_KEY = 'wecare_hospitals_appointments_v1';
 
@@ -7,17 +6,16 @@ export function getStoredAppointments(): Appointment[] {
   try {
     const raw = localStorage.getItem(APPOINTMENTS_KEY);
     if (!raw) {
-      localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(INITIAL_SAMPLE_APPOINTMENTS));
-      return INITIAL_SAMPLE_APPOINTMENTS;
+      return [];
     }
     const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed) && parsed.length > 0) {
+    if (Array.isArray(parsed)) {
       return parsed;
     }
-    return INITIAL_SAMPLE_APPOINTMENTS;
+    return [];
   } catch (e) {
     console.error('Error reading appointments from storage:', e);
-    return INITIAL_SAMPLE_APPOINTMENTS;
+    return [];
   }
 }
 

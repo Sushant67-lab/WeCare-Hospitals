@@ -24,7 +24,11 @@ export const Navbar: React.FC<NavbarProps> = ({
     { label: 'About', page: 'about' },
     { label: 'Departments', page: 'departments' },
     { label: 'Doctors', page: 'doctors' },
-    { label: 'My Appointments', page: 'appointments', count: appointmentsCount },
+    { 
+      label: 'My Appointments', 
+      page: 'appointments', 
+      count: user && appointmentsCount > 0 ? appointmentsCount : undefined 
+    },
     ...(isAdmin ? [{ label: 'Admin Portal', page: 'admin' as PageView }] : [])
   ];
 
@@ -108,7 +112,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   <span className="flex items-center gap-1.5">
                     {link.label === 'About' ? 'About Us' : link.label}
-                    {link.count !== undefined && link.count > 0 && (
+                    {user && link.count !== undefined && link.count > 0 && (
                       <span className="text-[10px] font-bold text-blue-800 bg-blue-100 px-1.5 py-0.2 rounded-full tabular-nums">
                         {link.count}
                       </span>
@@ -239,7 +243,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   }`}
                 >
                   <span>{link.label}</span>
-                  {link.count !== undefined && link.count > 0 && (
+                  {user && link.count !== undefined && link.count > 0 && (
                     <span className="text-xs font-bold text-blue-800 bg-blue-100 px-2 py-0.5 rounded-full">
                       {link.count}
                     </span>

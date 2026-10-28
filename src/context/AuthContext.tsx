@@ -210,9 +210,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signOutUser = async () => {
-    await signOut(auth);
+    try {
+      await signOut(auth);
+    } catch (e) {
+      console.warn('Sign out error:', e);
+    }
     setUser(null);
     setUserProfile(null);
+    try {
+      localStorage.removeItem('wecare_hospitals_appointments_v1');
+    } catch {
+      // Handled silently
+    }
   };
 
   return (
