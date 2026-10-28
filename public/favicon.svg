@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="wecareBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#1D4ED8" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1E3A8A" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <!-- Background rounded tile -->
+  <rect width="128" height="128" rx="28" fill="url(#wecareBg)" />
+
+  <!-- Heart silhouette -->
+  <path d="M64 104 C40 85 24 67 24 49 C24 35 35 24 49 24 C57 24 64 28 64 34 C64 28 71 24 79 24 C93 24 104 35 104 49 C104 67 88 85 64 104 Z" fill="#FFFFFF" filter="url(#shadow)" />
+
+  <!-- Hospital Cross inside heart -->
+  <path d="M58 48 H70 V58 H80 V70 H70 V80 H58 V70 H48 V58 H58 Z" fill="#2563EB" />
+</svg>

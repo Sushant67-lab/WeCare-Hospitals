@@ -309,22 +309,9 @@ export const AuthModal: React.FC = () => {
             <span>Google Account</span>
           </button>
 
-          <div className="pt-3 border-t border-slate-100 text-center space-y-2">
-            <button
-              type="button"
-              onClick={() => {
-                closeAuthModal();
-                window.location.hash = 'admin';
-              }}
-              className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors block mx-auto"
-            >
-              Hospital Staff or Administrator? Go to Admin Portal →
-            </button>
-
-            <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
-              <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />
-              <span>Encrypted HIPAA & Firebase Security Standards</span>
-            </div>
+          <div className="pt-2 flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
+            <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />
+            <span>Encrypted HIPAA & Firebase Security Standards</span>
           </div>
         </div>
 
