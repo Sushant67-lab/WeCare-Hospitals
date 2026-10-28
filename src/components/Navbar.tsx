@@ -61,17 +61,21 @@ export const Navbar: React.FC<NavbarProps> = ({
               <MapPin className="w-3.5 h-3.5 text-blue-400 shrink-0" />
               <span className="truncate">123 Health Avenue, Medical District, NY 10001</span>
             </div>
-            {isAdmin && (
-              <>
-                <span className="text-slate-700">|</span>
-                <button
-                  onClick={() => handleNavClick('admin')}
-                  className="px-2.5 py-0.5 rounded-full bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 hover:text-white font-semibold transition-colors flex items-center gap-1"
-                >
-                  <span>Admin Portal</span>
-                </button>
-              </>
-            )}
+            <span className="text-slate-700">|</span>
+            <button
+              onClick={() => handleNavClick('admin')}
+              className={`px-2.5 py-0.5 rounded-full border text-[11px] font-semibold transition-colors flex items-center gap-1.5 ${
+                isAdmin 
+                  ? 'bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/40 text-amber-300 hover:text-white' 
+                  : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-300 hover:text-white'
+              }`}
+              title="Hospital Administration Portal"
+            >
+              <span>Admin Portal</span>
+              {isAdmin && (
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              )}
+            </button>
           </div>
         </div>
       </div>

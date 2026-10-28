@@ -121,14 +121,17 @@ export const MyAppointmentsPage: React.FC<MyAppointmentsPageProps> = ({
     }
   };
 
-  const filtered = activeDataset.filter(apt => {
+  const filtered = (activeDataset || []).filter(apt => {
+    if (!apt) return false;
+    const q = (filterQuery || '').trim().toLowerCase();
     const matchesQuery = 
-      apt.referenceNumber.toLowerCase().includes(filterQuery.toLowerCase()) ||
-      apt.patientName.toLowerCase().includes(filterQuery.toLowerCase()) ||
-      apt.doctorName.toLowerCase().includes(filterQuery.toLowerCase()) ||
-      apt.departmentName.toLowerCase().includes(filterQuery.toLowerCase()) ||
-      (apt.patientPhone && apt.patientPhone.includes(filterQuery)) ||
-      (apt.patientEmail && apt.patientEmail.toLowerCase().includes(filterQuery.toLowerCase()));
+      !q ||
+      (apt.referenceNumber || '').toLowerCase().includes(q) ||
+      (apt.patientName || '').toLowerCase().includes(q) ||
+      (apt.doctorName || '').toLowerCase().includes(q) ||
+      (apt.departmentName || '').toLowerCase().includes(q) ||
+      Boolean(apt.patientPhone && apt.patientPhone.includes(q)) ||
+      Boolean(apt.patientEmail && apt.patientEmail.toLowerCase().includes(q));
 
     const matchesStatus = statusFilter === 'all' || apt.status === statusFilter;
 

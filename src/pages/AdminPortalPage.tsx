@@ -45,7 +45,7 @@ interface AdminPortalPageProps {
 }
 
 export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
-  appointments,
+  appointments = [],
   onViewPass,
   onAppointmentCreated,
   onAdminStatusChange
@@ -206,29 +206,6 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
     }
   };
 
-  // Filtered dataset
-  const filtered = appointments.filter(apt => {
-    const matchesQuery = 
-      apt.referenceNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      apt.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      apt.doctorName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      apt.departmentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (apt.patientPhone && apt.patientPhone.includes(searchQuery)) ||
-      (apt.patientEmail && apt.patientEmail.toLowerCase().includes(searchQuery.toLowerCase()));
-
-    const matchesStatus = statusFilter === 'all' || apt.status === statusFilter;
-    const matchesDept = deptFilter === 'all' || apt.departmentId === deptFilter;
-
-    return matchesQuery && matchesStatus && matchesDept;
-  });
-
-  // KPI Calculations
-  const totalCount = appointments.length;
-  const pendingCount = appointments.filter(a => a.status === 'pending').length;
-  const confirmedCount = appointments.filter(a => a.status === 'confirmed').length;
-  const cancelledCount = appointments.filter(a => a.status === 'cancelled').length;
-  const completedCount = appointments.filter(a => a.status === 'completed').length;
-
   // 1. GATE: If not logged in as Admin, show restricted login screen
   if (!user || !isAdmin) {
     return (
@@ -260,7 +237,7 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
                 <span>Patient Account Active</span>
               </div>
               <p className="text-[11px] text-amber-700 leading-relaxed">
-                You are currently signed in as a patient ({user.email}). Please enter administrator credentials below to gain admin access.
+                You are currently signed in as a patient ({user.email || 'patient'}). Please enter administrator credentials below to gain admin access.
               </p>
             </div>
           )}
@@ -285,7 +262,7 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
                   required
                   value={adminEmail}
                   onChange={(e) => setAdminEmail(e.target.value)}
-                  placeholder="Enter administrator email"
+                  placeholder="sushantabc122@gmail.com"
                   autoComplete="email"
                   className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white"
                 />
@@ -308,6 +285,20 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
                   className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white"
                 />
               </div>
+            </div>
+
+            <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+              <span>Admin: sushantabc122@gmail.com</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setAdminEmail('sushantabc122@gmail.com');
+                  setAdminPassword('81080731@5@');
+                }}
+                className="text-blue-600 hover:text-blue-800 font-semibold underline cursor-pointer"
+              >
+                Autofill
+              </button>
             </div>
 
             <button
@@ -334,6 +325,42 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
     );
   }
 
+  // Safe dataset for authenticated administrator
+  const safeAppointments = Array.isArray(appointments) ? appointments.filter(Boolean) : [];
+
+  // Filtered dataset
+  const filtered = safeAppointments.filter(apt => {
+    if (!apt) return false;
+    const q = (searchQuery || '').trim().toLowerCase();
+    const ref = (apt.referenceNumber || '').toLowerCase();
+    const pat = (apt.patientName || '').toLowerCase();
+    const doc = (apt.doctorName || '').toLowerCase();
+    const dept = (apt.departmentName || '').toLowerCase();
+    const ph = apt.patientPhone || '';
+    const em = (apt.patientEmail || '').toLowerCase();
+
+    const matchesQuery = 
+      !q ||
+      ref.includes(q) ||
+      pat.includes(q) ||
+      doc.includes(q) ||
+      dept.includes(q) ||
+      ph.includes(q) ||
+      em.includes(q);
+
+    const matchesStatus = statusFilter === 'all' || apt.status === statusFilter;
+    const matchesDept = deptFilter === 'all' || apt.departmentId === deptFilter;
+
+    return matchesQuery && matchesStatus && matchesDept;
+  });
+
+  // KPI Calculations
+  const totalCount = safeAppointments.length;
+  const pendingCount = safeAppointments.filter(a => a?.status === 'pending').length;
+  const confirmedCount = safeAppointments.filter(a => a?.status === 'confirmed').length;
+  const cancelledCount = safeAppointments.filter(a => a?.status === 'cancelled').length;
+  const completedCount = safeAppointments.filter(a => a?.status === 'completed').length;
+
   // 2. MAIN ADMIN PORTAL (Authenticated)
   return (
     <div className="space-y-8 pb-20">
@@ -352,7 +379,7 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
                 WeCare Admin Booking Operations
               </h1>
               <p className="text-xs sm:text-sm text-slate-400">
-                Logged in as <strong className="text-white">{user.email}</strong>. Manage outpatient confirmations, handle cancellations, and register new patients.
+                Logged in as <strong className="text-white">{user?.email || 'Hospital Administrator'}</strong>. Manage outpatient confirmations, handle cancellations, and register new patients.
               </p>
             </div>
 
@@ -797,7 +824,7 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
                           <Calendar className="w-3.5 h-3.5 text-slate-400" />
                           Date & Slot:
                         </span>
-                        <span className="font-semibold text-slate-900">{apt.date} · {apt.timeSlot.split(' ')[0]}</span>
+                        <span className="font-semibold text-slate-900">{apt.date || 'Scheduled'} · {(apt.timeSlot || 'Scheduled').split(' ')[0]}</span>
                       </div>
                     </div>
 

@@ -2,10 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="refresh" content="0; url=./" />
-    <title>Redirecting...</title>
+    <title>WeCare Hospitals - Redirecting</title>
     <script>
-      window.location.replace('./');
+      (function() {
+        var segments = window.location.pathname.split('/').filter(Boolean);
+        var last = segments[segments.length - 1] || '';
+        var validPages = ['home', 'about', 'departments', 'doctors', 'book', 'appointments', 'admin'];
+        var targetHash = '';
+        if (validPages.indexOf(last) !== -1) {
+          targetHash = '#' + last;
+          segments.pop();
+        }
+        var base = '/' + (segments.length > 0 ? segments.join('/') + '/' : '');
+        window.location.replace(base + targetHash);
+      })();
     </script>
   </head>
   <body>
