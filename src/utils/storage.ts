@@ -31,7 +31,7 @@ export function saveAppointment(appointmentData: Omit<Appointment, 'id' | 'refer
     ...appointmentData,
     id,
     referenceNumber,
-    status: 'confirmed',
+    status: 'pending',
     createdAt: new Date().toISOString()
   };
 

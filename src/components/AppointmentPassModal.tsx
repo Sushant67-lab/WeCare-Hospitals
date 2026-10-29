@@ -65,15 +65,29 @@ END:VCALENDAR`;
           </button>
 
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-400/30 flex items-center justify-center shrink-0">
-              <CheckCircle className="w-6 h-6" />
-            </div>
+            {appointment.status === 'confirmed' ? (
+              <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-400/30 flex items-center justify-center shrink-0">
+                <CheckCircle className="w-6 h-6" />
+              </div>
+            ) : appointment.status === 'pending' ? (
+              <div className="w-10 h-10 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center justify-center shrink-0">
+                <Clock className="w-6 h-6 animate-pulse" />
+              </div>
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/30 flex items-center justify-center shrink-0">
+                <X className="w-6 h-6" />
+              </div>
+            )}
             <div>
               <span className="text-[11px] font-semibold tracking-wider uppercase text-sky-300">
                 Official Digital Appointment Pass
               </span>
               <h2 id="pass-title" className="text-xl font-bold tracking-tight text-white">
-                Booking Confirmed
+                {appointment.status === 'confirmed'
+                  ? 'Booking Confirmed'
+                  : appointment.status === 'pending'
+                  ? 'Pending Admin Confirmation'
+                  : 'Booking Cancelled'}
               </h2>
             </div>
           </div>

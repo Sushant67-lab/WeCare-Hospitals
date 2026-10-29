@@ -25,11 +25,10 @@ export const Navbar: React.FC<NavbarProps> = ({
     { label: 'Departments', page: 'departments' },
     { label: 'Doctors', page: 'doctors' },
     { 
-      label: 'My Appointments', 
+      label: isAdmin ? 'Appointments' : 'My Appointments', 
       page: 'appointments', 
       count: user && appointmentsCount > 0 ? appointmentsCount : undefined 
-    },
-    ...(isAdmin ? [{ label: 'Admin Portal', page: 'admin' as PageView }] : [])
+    }
   ];
 
   const handleNavClick = (page: PageView) => {
@@ -41,7 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      {/* Top Utility Bar matching video */}
+      {/* Top Utility Bar */}
       <div className="bg-slate-900 text-slate-300 text-xs py-2 px-3 sm:px-8 border-b border-slate-800 w-full overflow-hidden">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1 sm:gap-2 text-[11px] sm:text-xs">
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5 sm:gap-4 text-slate-300">
@@ -61,17 +60,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               <MapPin className="w-3.5 h-3.5 text-blue-400 shrink-0" />
               <span className="truncate">123 Health Avenue, Medical District, NY 10001</span>
             </div>
-            {isAdmin && (
-              <>
-                <span className="text-slate-700">|</span>
-                <button
-                  onClick={() => handleNavClick('admin')}
-                  className="px-2.5 py-0.5 rounded-full bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 hover:text-white font-semibold transition-colors flex items-center gap-1"
-                >
-                  <span>Admin Portal</span>
-                </button>
-              </>
-            )}
           </div>
         </div>
       </div>

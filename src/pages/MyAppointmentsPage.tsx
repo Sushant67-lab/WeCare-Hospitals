@@ -96,8 +96,8 @@ export const MyAppointmentsPage: React.FC<MyAppointmentsPageProps> = ({
     );
   }
 
-  // Choose which appointment dataset to show
-  const activeDataset = (isAdmin && activeTab === 'admin')
+  // When admin is logged in, show all hospital appointments with admin actions
+  const activeDataset = isAdmin
     ? (allHospitalAppointments.length > 0 ? allHospitalAppointments : appointments)
     : appointments;
 
@@ -158,7 +158,7 @@ export const MyAppointmentsPage: React.FC<MyAppointmentsPageProps> = ({
                 {isAdmin ? (
                   <>
                     <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
-                    <span>Hospital Administration Portal</span>
+                    <span>Admin Mode · {user?.email || 'sushantabc122@gmail.com'}</span>
                   </>
                 ) : (
                   <span>Patient Outpatient Portal</span>
@@ -166,43 +166,16 @@ export const MyAppointmentsPage: React.FC<MyAppointmentsPageProps> = ({
               </div>
               
               <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-                {isAdmin && activeTab === 'admin' 
-                  ? 'Manage Hospital Appointments' 
-                  : 'My Appointments'}
+                {isAdmin ? 'Manage Hospital Appointments' : 'My Appointments'}
               </h1>
               <p className="text-sm text-slate-500 max-w-2xl">
-                {isAdmin && activeTab === 'admin'
+                {isAdmin
                   ? 'Review outpatient appointment requests, confirm patient slots, or cancel and manage clinical schedules in real-time.'
                   : 'View your scheduled visits, digital admission passes, and real-time consultation confirmation status.'}
               </p>
             </div>
 
             <div className="flex items-center gap-3">
-              {isAdmin && (
-                <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-semibold">
-                  <button
-                    onClick={() => setActiveTab('admin')}
-                    className={`px-3 py-1.5 rounded-lg transition-all ${
-                      activeTab === 'admin' 
-                        ? 'bg-blue-600 text-white shadow-xs' 
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    Admin Operations ({totalCount})
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('personal')}
-                    className={`px-3 py-1.5 rounded-lg transition-all ${
-                      activeTab === 'personal' 
-                        ? 'bg-blue-600 text-white shadow-xs' 
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    My Bookings
-                  </button>
-                </div>
-              )}
-
               <button
                 onClick={() => onNavigate('book')}
                 className="flex items-center gap-2 px-5 py-2.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-xs"
@@ -214,7 +187,7 @@ export const MyAppointmentsPage: React.FC<MyAppointmentsPageProps> = ({
           </div>
 
           {/* Admin Metric Strip */}
-          {isAdmin && activeTab === 'admin' && (
+          {isAdmin && (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3">
               <div 
                 onClick={() => setStatusFilter('all')}
@@ -510,10 +483,10 @@ export const MyAppointmentsPage: React.FC<MyAppointmentsPageProps> = ({
                   </div>
 
                   {/* ADMIN ACTION PANEL: Whether confirmed or cancelled */}
-                  {isAdmin && activeTab === 'admin' ? (
+                  {isAdmin ? (
                     <div className="p-4 bg-slate-50/90 border-t border-slate-200 space-y-2">
                       <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                        <span>Admin Status Actions</span>
+                        <span>Admin Actions</span>
                         {updatingId === apt.id && (
                           <span className="text-blue-600 font-semibold flex items-center gap-1 normal-case">
                             <RefreshCw className="w-3 h-3 animate-spin" />
@@ -523,7 +496,6 @@ export const MyAppointmentsPage: React.FC<MyAppointmentsPageProps> = ({
                       </div>
 
                       <div className="grid grid-cols-2 gap-2">
-                        
                         {/* Confirm Button */}
                         <button
                           type="button"
@@ -553,7 +525,6 @@ export const MyAppointmentsPage: React.FC<MyAppointmentsPageProps> = ({
                           <X className="w-3.5 h-3.5 stroke-[3]" />
                           <span>{isCancelled ? 'Cancelled' : 'Cancel'}</span>
                         </button>
-
                       </div>
 
                       <div className="flex items-center justify-between pt-1 text-[11px]">
@@ -576,13 +547,23 @@ export const MyAppointmentsPage: React.FC<MyAppointmentsPageProps> = ({
                         )}
 
                         {isCancelled && (
-                          <button
-                            type="button"
-                            onClick={() => handleAdminChangeStatus(apt.id, 'pending')}
-                            className="text-amber-600 hover:text-amber-800 font-semibold"
-                          >
-                            Reopen to Pending
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => handleAdminChangeStatus(apt.id, 'confirmed')}
+                              className="text-emerald-600 hover:text-emerald-800 font-semibold"
+                            >
+                              Re-Confirm
+                            </button>
+                            <span className="text-slate-300">·</span>
+                            <button
+                              type="button"
+                              onClick={() => handleAdminChangeStatus(apt.id, 'pending')}
+                              className="text-amber-600 hover:text-amber-800 font-medium"
+                            >
+                              Set Pending
+                            </button>
+                          </div>
                         )}
                       </div>
                     </div>

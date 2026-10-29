@@ -72,7 +72,12 @@ function HospitalApp() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '') as PageView;
-      const validPages: PageView[] = ['home', 'about', 'departments', 'doctors', 'book', 'appointments', 'admin'];
+      if (hash === 'admin') {
+        setCurrentPage('appointments');
+        window.location.hash = 'appointments';
+        return;
+      }
+      const validPages: PageView[] = ['home', 'about', 'departments', 'doctors', 'book', 'appointments'];
       if (validPages.includes(hash)) {
         setCurrentPage(hash);
       }

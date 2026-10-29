@@ -43,7 +43,7 @@ export async function createAppointmentInFirestore(
   const currentAuthUser = auth.currentUser;
   const effectiveUserId = userId || currentAuthUser?.uid || 'guest';
 
-  // Bookings are recorded with confirmed status (or specified status) with safe defined string defaults
+  // Bookings are recorded with 'pending' status by default until reviewed and confirmed by the administrator
   const newAppointment: Appointment = {
     patientName: appointmentData.patientName || '',
     patientPhone: appointmentData.patientPhone || '',
@@ -65,7 +65,7 @@ export async function createAppointmentInFirestore(
     id,
     userId: effectiveUserId,
     referenceNumber,
-    status: appointmentData.status || 'confirmed',
+    status: appointmentData.status || 'pending',
     createdAt: new Date().toISOString()
   };
 

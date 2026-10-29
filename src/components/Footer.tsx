@@ -86,13 +86,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenEmergency }) =
                   Book an Appointment
                 </button>
               </li>
-              {isAdmin && (
-                <li>
-                  <button onClick={() => onNavigate('admin')} className="text-amber-400 hover:text-amber-300 transition-colors font-medium flex items-center gap-1">
-                    <span>Admin Portal</span>
-                  </button>
-                </li>
-              )}
             </ul>
           </div>
 

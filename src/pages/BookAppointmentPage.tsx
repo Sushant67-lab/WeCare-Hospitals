@@ -136,7 +136,7 @@ export const BookAppointmentPage: React.FC<BookAppointmentPageProps> = ({
         consultationType: 'in_person',
         symptoms: reason.trim() || 'General Consultation',
         notes: '',
-        status: 'confirmed',
+        status: 'pending',
         fee: activeDoc ? activeDoc.consultationFee : 120
       }, user.uid);
 
@@ -161,17 +161,20 @@ export const BookAppointmentPage: React.FC<BookAppointmentPageProps> = ({
       <div className="py-12 sm:py-20 px-4 sm:px-8 max-w-2xl mx-auto">
         <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 shadow-sm text-center space-y-6 animate-in fade-in zoom-in-95 duration-200">
           
-          {/* Green Check Circle */}
-          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-xs">
-            <CheckCircle2 className="w-10 h-10 sm:w-12 sm:h-12 stroke-[2.2]" />
+          {/* Amber Clock Circle for Pending */}
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto shadow-xs">
+            <Clock className="w-10 h-10 sm:w-12 sm:h-12 stroke-[2.2]" />
           </div>
 
           <div className="space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold uppercase tracking-wider">
+              <span>Status: Pending Admin Confirmation</span>
+            </div>
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
-              Appointment Requested!
+              Appointment Request Submitted
             </h2>
             <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-              Thank you for choosing WeCare Hospitals. Your appointment request has been securely recorded in your account. Our outpatient desk will contact you to confirm final timings.
+              Your appointment request is securely registered and awaiting review by the hospital administration desk. The appointment remains in <strong>Pending</strong> status until the administrator confirms it.
             </p>
           </div>
 
